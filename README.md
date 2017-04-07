@@ -1,8 +1,8 @@
-#KitService
+# KitService
 The KitService keeps track of all game kits the player owns, and integrates with the CurrencyService. It is backed by MongoDB.
 
-###Endpoints
-####/packages [GET] Gets all packages
+### Endpoints
+#### /packages [GET] Gets all packages
 
 **Response**
 '''json
@@ -11,7 +11,7 @@ The KitService keeps track of all game kits the player owns, and integrates with
 }
 '''
 
-####/packages/{packageId} [GET] - Gets all kits and other information of the package
+#### /packages/{packageId} [GET] - Gets all kits and other information of the package
 
 **Response**
 '''json
@@ -31,7 +31,7 @@ The KitService keeps track of all game kits the player owns, and integrates with
 }
 '''
 
-####/packages/{packageId} [PUT] - Updates package information
+#### /packages/{packageId} [PUT] - Updates package information
 
 **Request**
 '''json
@@ -58,7 +58,7 @@ The KitService keeps track of all game kits the player owns, and integrates with
 }
 '''
 
-####/packages/{packageId}/player/{uuid}/kits [GET] - Gets the kits the player owns
+#### /packages/{packageId}/player/{uuid}/kits [GET] - Gets the kits the player owns
 
 **Response**
 '''json
@@ -67,7 +67,7 @@ The KitService keeps track of all game kits the player owns, and integrates with
 }
 '''
 
-####/packages/{packageId}/player/{uuid}/kits/{kitId} [POST] -Purchases the said kit
+#### /packages/{packageId}/player/{uuid}/kits/{kitId} [POST] -Purchases the said kit
 
 **Response**
 
@@ -84,7 +84,7 @@ error codes:
 }
 '''
 
-####/packages/{packageId}/player/{uuid}/kits/{kitId} [GET] - Returns whether or not the player owns this kit
+#### /packages/{packageId}/player/{uuid}/kits/{kitId} [GET] - Returns whether or not the player owns this kit
 
 '''json
 {
