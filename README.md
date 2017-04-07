@@ -5,16 +5,16 @@ The KitService keeps track of all game kits the player owns, and integrates with
 #### /packages [GET] Gets all packages
 
 **Response**
-'''json
+```json
 {
 "packages" : ["ctf", "gw"]
 }
-'''
+```
 
 #### /packages/{packageId} [GET] - Gets all kits and other information of the package
 
 **Response**
-'''json
+```json
 {
 "name": "Capture The Flag kits",
 "kits": {
@@ -24,17 +24,17 @@ The KitService keeps track of all game kits the player owns, and integrates with
         "gold": 10
       },
       "meta": {
-        "items" : {...}
+        "items" : {}
       }
     }
   }
 }
-'''
+```
 
 #### /packages/{packageId} [PUT] - Updates package information
 
 **Request**
-'''json
+```json
 {
 "name": "Capture The Flag kits",
 "kits": {
@@ -44,28 +44,28 @@ The KitService keeps track of all game kits the player owns, and integrates with
         "gold": 10
       },
       "meta": {
-        "items" : {...}
+        "items" : {}
       }
     }
   }
 }
-'''
+```
 
 **Response**
-'''json
+```json
 {
 "success": true
 }
-'''
+```
 
 #### /packages/{packageId}/player/{uuid}/kits [GET] - Gets the kits the player owns
 
 **Response**
-'''json
+```json
 {
 "kits": ["warrior"]
 }
-'''
+```
 
 #### /packages/{packageId}/player/{uuid}/kits/{kitId} [POST] -Purchases the said kit
 
@@ -76,19 +76,18 @@ error codes:
 2: Already purchased
 3: Insufficient funds
 4: Kit does not exist
-'''json
+```json
 {
 "success": false,
 "error": "Already purchased",
 "code": 2
 }
-'''
+```
 
 #### /packages/{packageId}/player/{uuid}/kits/{kitId} [GET] - Returns whether or not the player owns this kit
-
-'''json
+```json
 {
 "owned": true
 }
-'''
+```
 
