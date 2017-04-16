@@ -16,6 +16,9 @@
 
 package com.exorath.service.kit.service;
 
+import com.exorath.service.currency.api.CurrencyServiceAPI;
+import com.exorath.service.currency.res.IncrementReq;
+import com.exorath.service.currency.res.MultiIncrementReq;
 import com.exorath.service.kit.Service;
 import com.exorath.service.kit.res.Kit;
 import com.exorath.service.kit.res.KitPackage;
@@ -40,12 +43,15 @@ import java.util.Map;
  */
 public class MongoService implements Service {
     private static final Gson GSON = new Gson();
+    private CurrencyServiceAPI currencyServiceAPI;
     private MongoCollection<Document> playersCollection;
     private MongoCollection<Document> kitPackagesCollection;
-    public MongoService(MongoClient client, String databaseName) {
+
+    public MongoService(MongoClient client, String databaseName, CurrencyServiceAPI currencyServiceAPI) {
+        this.currencyServiceAPI = currencyServiceAPI;
         MongoDatabase db = client.getDatabase(databaseName);
-        playersCollection = db.getCollection("players");
-        kitPackagesCollection = db.getCollection("packages");
+        this.playersCollection = db.getCollection("players");
+        this.kitPackagesCollection = db.getCollection("packages");
     }
 
     @Override
@@ -60,15 +66,15 @@ public class MongoService implements Service {
     @Override
     public KitPackage getPackage(String packageId) {
         Document packageDoc = kitPackagesCollection.find(new Document("_id", packageId)).first();
-        if(packageDoc == null)
+        if (packageDoc == null)
             return null;
         HashMap<String, Kit> kits = new HashMap<>();
-        if(packageDoc.containsKey("kits")){
+        if (packageDoc.containsKey("kits")) {
             Document kitsDoc = packageDoc.get("kits", Document.class);
             for (Map.Entry<String, Object> entry : kitsDoc.entrySet()) {
                 Document kitDoc = (Document) entry.getValue();
                 HashMap<String, Integer> costs = new HashMap<>();
-                if(kitDoc.containsKey("costs"))
+                if (kitDoc.containsKey("costs"))
                     for (Map.Entry<String, Object> costEntry : kitDoc.get("costs", Document.class).entrySet())
                         costs.put(costEntry.getKey(), (Integer) costEntry.getValue());
                 Kit kit = new Kit(kitDoc.getString("name"), costs, GSON.fromJson(kitDoc.getString("meta"), JsonObject.class));
@@ -101,7 +107,7 @@ public class MongoService implements Service {
             }
             UpdateResult result = kitPackagesCollection.updateOne(new Document("_id", packageId), packageDoc, new UpdateOptions().upsert(true));
             return new Success(result.getMatchedCount() > 0);
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return new Success(e.getMessage(), 1);
         }
@@ -110,15 +116,24 @@ public class MongoService implements Service {
     @Override
     public List<String> getKits(String packageId, String uuid) {
         Document document = playersCollection.find(new Document("packageId", packageId).append("uuid", uuid)).first();
-        if(document == null || !document.containsKey("kits"))
+        if (document == null || !document.containsKey("kits"))
             return new ArrayList<>();
         return document.get("kits", List.class);
     }
 
-   //TODO: Integrate and implement this method with the currencyServices
+    //TODO: Integrate and implement this method with the currencyServices
     @Override
     public Success purchaseKit(PurchaseKitReq req) {
-        return null;
+        KitPackage kitPackage = getPackage(req.getPackageId());
+        if (kitPackage == null)
+            return new Success("Package not found", -1);
+        Kit kit = kitPackage.getKits().get(req.getKitId());
+        if(kit == null)
+            return new Success("Kit not found", -1);
+        MultiIncrementReq multiIncrementReq = new MultiIncrementReq(req.getUuid());
+        kit.getCosts().forEach((currency, cost) -> multiIncrementReq.addIncrement(currency, -cost, cost));
+        com.exorath.service.currency.res.Success success = currencyServiceAPI.multiIncrement(multiIncrementReq);
+        return new Success(success.isSuccess(), success.getError(), success.getCode());
     }
 
     @Override

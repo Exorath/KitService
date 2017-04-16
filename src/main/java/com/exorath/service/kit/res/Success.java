@@ -34,6 +34,12 @@ public class Success {
         this.code = code;
     }
 
+    public Success(boolean success, String error, Integer code) {
+        this.success = success;
+        this.error = error;
+        this.code = code;
+    }
+
     public boolean isSuccess() {
         return success;
     }

@@ -32,6 +32,12 @@
             <artifactId>ServiceCommons</artifactId>
             <version>1.2.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.github.Exorath</groupId>
+            <artifactId>currencyservice</artifactId>
+            <version>0.0.2</version>
+        </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
