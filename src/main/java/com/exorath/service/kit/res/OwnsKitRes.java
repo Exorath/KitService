@@ -22,6 +22,9 @@ package com.exorath.service.kit.res;
 public class OwnsKitRes {
     private boolean owned;
 
+    public OwnsKitRes() {
+    }
+
     public OwnsKitRes(boolean owned) {
         this.owned = owned;
     }

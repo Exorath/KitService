@@ -20,6 +20,8 @@ import com.exorath.service.commons.portProvider.PortProvider;
 import com.exorath.service.kit.res.KitPackage;
 import com.exorath.service.kit.res.PurchaseKitReq;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import spark.Route;
 
 import static spark.Spark.port;
@@ -49,15 +51,15 @@ public class Transport {
     }
 
     private static Route getOwnsKitRoute(Service service) {
-        return (req, res) -> service.ownsKit(req.params("packageId"),req.params("uuid"),req.params("kitId"));
+        return (req, res) -> service.ownsKit(req.params("packageId"), req.params("uuid"), req.params("kitId"));
     }
 
     private static Route getPurchaseKitRoute(Service service) {
-        return (req, res) -> service.purchaseKit(new PurchaseKitReq(req.params("packageId"),req.params("uuid"),req.params("kitId")));
+        return (req, res) -> service.purchaseKit(new PurchaseKitReq(req.params("packageId"), req.params("uuid"), req.params("kitId")));
     }
 
     private static Route getGetPlayerKitsRoute(Service service) {
-        return (req, res) -> service.getKits(req.params("packageId"),req.params("uuid"));
+        return (req, res) -> service.getKits(req.params("packageId"), req.params("uuid"));
     }
 
     private static Route getPutPackageRoute(Service service) {

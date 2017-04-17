@@ -16,10 +16,7 @@
 
 package com.exorath.service.kit;
 
-import com.exorath.service.kit.res.Kit;
-import com.exorath.service.kit.res.KitPackage;
-import com.exorath.service.kit.res.PurchaseKitReq;
-import com.exorath.service.kit.res.Success;
+import com.exorath.service.kit.res.*;
 
 import java.util.List;
 
@@ -32,7 +29,7 @@ public interface Service {
      * Gets a list of all packages registered to this service
      * @return  a list of all packages registered to this service
      */
-    List<String> getPackages();
+    GetPackagesRes getPackages();
 
     /**
      * gets all kits of the specified package, and the name
@@ -55,7 +52,7 @@ public interface Service {
      * @param uuid player uuid
      * @return a list of all kit id's the player owns
      */
-    List<String> getKits(String packageId, String uuid);
+    GetPlayerKitsResponse getKits(String packageId, String uuid);
 
 
     /**
@@ -72,5 +69,5 @@ public interface Service {
      * @param kitId the kit id
      * @return whether or not the player owns this kit
      */
-    boolean ownsKit(String packageId, String uuid, String kitId);
+    OwnsKitRes ownsKit(String packageId, String uuid, String kitId);
 }

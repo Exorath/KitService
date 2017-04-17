@@ -20,10 +20,7 @@ import com.exorath.service.currency.api.CurrencyServiceAPI;
 import com.exorath.service.currency.res.IncrementReq;
 import com.exorath.service.currency.res.MultiIncrementReq;
 import com.exorath.service.kit.Service;
-import com.exorath.service.kit.res.Kit;
-import com.exorath.service.kit.res.KitPackage;
-import com.exorath.service.kit.res.PurchaseKitReq;
-import com.exorath.service.kit.res.Success;
+import com.exorath.service.kit.res.*;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mongodb.MongoClient;
@@ -55,11 +52,11 @@ public class MongoService implements Service {
     }
 
     @Override
-    public List<String> getPackages() {
+    public GetPackagesRes getPackages() {
         List<String> packages = new ArrayList<>();
         kitPackagesCollection.find().projection(new Document("_id", 1)).iterator()
                 .forEachRemaining(packageDoc -> packages.add(packageDoc.getString("_id")));
-        return packages;
+        return new GetPackagesRes(packages);
     }
 
     //Maybe move to pojo mapper/split this method up, for now I'm lazy
@@ -114,11 +111,11 @@ public class MongoService implements Service {
     }
 
     @Override
-    public List<String> getKits(String packageId, String uuid) {
+    public GetPlayerKitsResponse getKits(String packageId, String uuid) {
         Document document = playersCollection.find(new Document("packageId", packageId).append("uuid", uuid)).first();
         if (document == null || !document.containsKey("kits"))
-            return new ArrayList<>();
-        return document.get("kits", List.class);
+            return new GetPlayerKitsResponse(new ArrayList<>());
+        return new GetPlayerKitsResponse(document.get("kits", List.class));
     }
 
     //TODO: Integrate and implement this method with the currencyServices
@@ -137,7 +134,7 @@ public class MongoService implements Service {
     }
 
     @Override
-    public boolean ownsKit(String packageId, String uuid, String kitId) {
-        return getKits(packageId, uuid).contains(kitId);
+    public OwnsKitRes ownsKit(String packageId, String uuid, String kitId) {
+        return new OwnsKitRes(getKits(packageId, uuid).getKits().contains(kitId));
     }
 }
