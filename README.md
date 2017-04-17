@@ -91,3 +91,10 @@ error codes:
 }
 ```
 
+
+## Environment
+| Name | Value |
+| --------- | --- |
+| MONGO_URI | {mongo_uri} |
+| DB_NAME | {db name to store data} |
+| CURRENCY_SERVICE_ADDRESS | {ip:port} |

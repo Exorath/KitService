@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: kitservice
+  labels:
+    app: kitservice
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: kitservice
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: kitservice
+  labels:
+    app: kitservice
+spec:
+  strategy:
+    type: Recreate
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: kitservice
+    spec:
+      containers:
+      - name: kitservice
+        image: exorath/kitservice
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: "8080"
+        - name: MONGO_URI
+          value: "<INSERT_URI>"
+        - name: DB_NAME
+          value: "currencyservice"
+        - name: CURRENCY_SERVICE_ADDRESS
+          value: "<ip:port>"
