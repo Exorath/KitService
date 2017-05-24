@@ -20,6 +20,9 @@ The KitService keeps track of all game kits the player owns, and integrates with
 "kits": {
   "warrior": {
       "name": "Warrior Kit",
+      "itemStack": {
+          "material": "IRON_SWORD"
+      },
       "costs": {
         "gold": 10
       },
@@ -40,6 +43,9 @@ The KitService keeps track of all game kits the player owns, and integrates with
 "kits": {
   "warrior": {
       "name": "Warrior Kit",
+      "itemStack": {
+          "material": "IRON_SWORD"
+      },
       "costs": {
         "gold": 10
       },

@@ -27,11 +27,17 @@ public class Kit {
     private String name;
     private HashMap<String, Integer> costs;
     private JsonObject meta;
+    private JsonObject itemStack;
+
 
     public Kit(String name, HashMap<String, Integer> costs, JsonObject meta) {
         this.name = name;
         this.costs = costs;
         this.meta = meta;
+    }
+
+    public JsonObject getItemStack() {
+        return itemStack;
     }
 
     public String getName() {
