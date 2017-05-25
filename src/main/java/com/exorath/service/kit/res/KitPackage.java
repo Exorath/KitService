@@ -35,6 +35,6 @@ public class KitPackage {
     }
 
     public HashMap<String, Kit> getKits() {
-        return kits;
+        return kits == null ? new HashMap<>() : kits;
     }
 }

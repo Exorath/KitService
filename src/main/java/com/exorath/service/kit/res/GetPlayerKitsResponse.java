@@ -1,5 +1,6 @@
 package com.exorath.service.kit.res;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,6 @@ public class GetPlayerKitsResponse {
     }
 
     public List<String> getKits() {
-        return kits;
+        return kits == null ? new ArrayList<>() : kits;
     }
 }

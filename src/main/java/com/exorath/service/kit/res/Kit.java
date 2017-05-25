@@ -45,7 +45,7 @@ public class Kit {
     }
 
     public HashMap<String, Integer> getCosts() {
-        return costs;
+        return costs == null ? new HashMap<>() : costs;
     }
 
     public JsonObject getMeta() {
