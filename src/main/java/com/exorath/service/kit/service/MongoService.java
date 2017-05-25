@@ -102,7 +102,7 @@ public class MongoService implements Service {
                 }
                 packageDoc.put("kits", kitsDoc);
             }
-            UpdateResult result = kitPackagesCollection.updateOne(new Document("_id", packageId), new Document("$set", packageId), new UpdateOptions().upsert(true));
+            UpdateResult result = kitPackagesCollection.updateOne(new Document("_id", packageId), new Document("$set", packageDoc), new UpdateOptions().upsert(true));
             return new Success(result.getMatchedCount() > 0);
         } catch (Exception e) {
             e.printStackTrace();
