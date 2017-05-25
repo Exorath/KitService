@@ -36,6 +36,11 @@ public class Kit {
         this.meta = meta;
     }
 
+    public Kit setItemStack(JsonObject itemStack) {
+        this.itemStack = itemStack;
+        return this;
+    }
+
     public JsonObject getItemStack() {
         return itemStack;
     }

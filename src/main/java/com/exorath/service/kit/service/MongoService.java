@@ -75,6 +75,9 @@ public class MongoService implements Service {
                     for (Map.Entry<String, Object> costEntry : kitDoc.get("costs", Document.class).entrySet())
                         costs.put(costEntry.getKey(), (Integer) costEntry.getValue());
                 Kit kit = new Kit(kitDoc.getString("name"), costs, GSON.fromJson(kitDoc.getString("meta"), JsonObject.class));
+
+                if (kitDoc.containsKey("itemStack"))
+                    kit.setItemStack(GSON.fromJson(kitDoc.getString("itemStack"), JsonObject.class));
                 kits.put(entry.getKey(), kit);
             }
         }
@@ -90,6 +93,8 @@ public class MongoService implements Service {
                 Document kitsDoc = new Document();
                 for (Map.Entry<String, Kit> kitEntry : pack.getKits().entrySet()) {
                     Document kitDoc = new Document("name", kitEntry.getValue().getName());
+                    if (kitEntry.getValue().getItemStack() != null)
+                        kitDoc.put("itemStack", kitEntry.getValue().getItemStack().toString());
                     if (kitEntry.getValue().getMeta() != null)
                         kitDoc.put("meta", GSON.toJson(kitEntry.getValue().getMeta()));
                     if (kitEntry.getValue().getCosts() != null) {
@@ -125,7 +130,7 @@ public class MongoService implements Service {
         if (kitPackage == null)
             return new Success("Package not found", -1);
         Kit kit = kitPackage.getKits().get(req.getKitId());
-        if(kit == null)
+        if (kit == null)
             return new Success("Kit not found", -1);
         MultiIncrementReq multiIncrementReq = new MultiIncrementReq(req.getUuid());
         kit.getCosts().forEach((currency, cost) -> multiIncrementReq.addIncrement(currency, -cost, cost));
