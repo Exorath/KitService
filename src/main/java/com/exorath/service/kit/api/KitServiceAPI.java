@@ -52,7 +52,7 @@ public class KitServiceAPI implements Service {
     @Override
     public GetPlayerKitsResponse getKits(String packageId, String uuid) {
         try {
-            return GSON.fromJson(Unirest.put(url("/packages/{packageId}/player/{uuid}/kits"))
+            return GSON.fromJson(Unirest.get(url("/packages/{packageId}/player/{uuid}/kits"))
                     .routeParam("packageId", packageId)
                     .routeParam("uuid", uuid)
                     .asString().getBody(), GetPlayerKitsResponse.class);
