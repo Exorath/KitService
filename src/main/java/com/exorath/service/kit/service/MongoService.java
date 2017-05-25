@@ -35,6 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.mongodb.client.model.Updates.push;
+
 /**
  * Created by Toon on 4/5/2017.
  */
@@ -132,9 +134,16 @@ public class MongoService implements Service {
         Kit kit = kitPackage.getKits().get(req.getKitId());
         if (kit == null)
             return new Success("Kit not found", -1);
+        if (ownsKit(req.getPackageId(), req.getUuid(), req.getKitId()).isOwned())
+            return new Success("Player already owns this kit", -1);
         MultiIncrementReq multiIncrementReq = new MultiIncrementReq(req.getUuid());
         kit.getCosts().forEach((currency, cost) -> multiIncrementReq.addIncrement(currency, -cost, cost));
         com.exorath.service.currency.res.Success success = currencyServiceAPI.multiIncrement(multiIncrementReq);
+        if (!success.isSuccess())
+            return new Success(success.getError(), success.getCode());
+        if (success.isSuccess()) {
+            kitPackagesCollection.updateOne(new Document("packageId", req.getPackageId()).append("uuid", req.getPackageId()), push("kits", req.getKitId()), new UpdateOptions().upsert(true));
+        }
         return new Success(success.isSuccess(), success.getError(), success.getCode());
     }
 
