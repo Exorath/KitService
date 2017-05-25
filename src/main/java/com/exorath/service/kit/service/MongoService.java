@@ -142,7 +142,7 @@ public class MongoService implements Service {
         if (!success.isSuccess())
             return new Success(success.getError(), success.getCode());
         if (success.isSuccess()) {
-            playersCollection.updateOne(new Document("packageId", req.getPackageId()).append("uuid", req.getPackageId()), push("kits", req.getKitId()), new UpdateOptions().upsert(true));
+            playersCollection.updateOne(new Document("packageId", req.getPackageId()).append("uuid", req.getUuid()), push("kits", req.getKitId()), new UpdateOptions().upsert(true));
         }
         return new Success(success.isSuccess(), success.getError(), success.getCode());
     }
