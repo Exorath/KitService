@@ -22,7 +22,7 @@ public class KitServiceAPI implements Service {
     @Override
     public GetPackagesRes getPackages() {
         try {
-            return GSON.fromJson(Unirest.get("/packages").asString().getBody(), GetPackagesRes.class);
+            return GSON.fromJson(Unirest.get(url("/packages")).asString().getBody(), GetPackagesRes.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -32,7 +32,7 @@ public class KitServiceAPI implements Service {
     @Override
     public KitPackage getPackage(String packageId) {
         try {
-            return GSON.fromJson(Unirest.get("/packages/{packageId}").routeParam("packageId", packageId).asString().getBody(), KitPackage.class);
+            return GSON.fromJson(Unirest.get(url("/packages/{packageId}")).routeParam("packageId", packageId).asString().getBody(), KitPackage.class);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -42,7 +42,7 @@ public class KitServiceAPI implements Service {
     @Override
     public Success updatePackage(String packageId, KitPackage pack) {
         try {
-            return GSON.fromJson(Unirest.put("/packages/{packageId}").routeParam("packageId", packageId).body(GSON.toJson(pack)).asString().getBody(), Success.class);
+            return GSON.fromJson(Unirest.put(url("/packages/{packageId}")).routeParam("packageId", packageId).body(GSON.toJson(pack)).asString().getBody(), Success.class);
         } catch (Exception e) {
             e.printStackTrace();
             return new Success(e.getMessage(), -1);
@@ -52,7 +52,7 @@ public class KitServiceAPI implements Service {
     @Override
     public GetPlayerKitsResponse getKits(String packageId, String uuid) {
         try {
-            return GSON.fromJson(Unirest.put("/packages/{packageId}/player/{uuid}/kits")
+            return GSON.fromJson(Unirest.put(url("/packages/{packageId}/player/{uuid}/kits"))
                     .routeParam("packageId", packageId)
                     .routeParam("uuid", uuid)
                     .asString().getBody(), GetPlayerKitsResponse.class);
@@ -65,7 +65,7 @@ public class KitServiceAPI implements Service {
     @Override
     public Success purchaseKit(PurchaseKitReq req) {
         try {
-            return GSON.fromJson(Unirest.post("/packages/{packageId}/player/{uuid}/kits/{kitId}")
+            return GSON.fromJson(Unirest.post(url("/packages/{packageId}/player/{uuid}/kits/{kitId}"))
                     .routeParam("packageId", req.getPackageId())
                     .routeParam("uuid", req.getUuid())
                     .routeParam("kitId", req.getKitId())
@@ -76,10 +76,13 @@ public class KitServiceAPI implements Service {
         }
     }
 
+    private String url(String endpoint){
+        return address + endpoint;
+    }
     @Override
     public OwnsKitRes ownsKit(String packageId, String uuid, String kitId) {
         try {
-            return GSON.fromJson(Unirest.post("/packages/{packageId}/player/{uuid}/kits/{kitId}")
+            return GSON.fromJson(Unirest.post(url("/packages/{packageId}/player/{uuid}/kits/{kitId}"))
                     .routeParam("packageId", packageId)
                     .routeParam("uuid", uuid)
                     .routeParam("kitId", kitId)
