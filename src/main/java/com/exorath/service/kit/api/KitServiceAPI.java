@@ -96,7 +96,7 @@ public class KitServiceAPI implements Service {
     @Override
     public GetCurrentKitResponse getCurrentKit(String packageId, String uuid) {
         try {
-            return GSON.fromJson(Unirest.post(url("/packages/{packageId}/player/{uuid}/current"))
+            return GSON.fromJson(Unirest.get(url("/packages/{packageId}/player/{uuid}/current"))
                     .routeParam("packageId", packageId)
                     .routeParam("uuid", uuid)
                     .asString().getBody(), GetCurrentKitResponse.class);
