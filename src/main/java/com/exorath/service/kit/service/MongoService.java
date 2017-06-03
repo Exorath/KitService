@@ -36,6 +36,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.mongodb.client.model.Updates.push;
+import static com.mongodb.client.model.Updates.set;
 
 /**
  * Created by Toon on 4/5/2017.
@@ -44,6 +45,7 @@ public class MongoService implements Service {
     private static final Gson GSON = new Gson();
     private CurrencyServiceAPI currencyServiceAPI;
     private MongoCollection<Document> playersCollection;
+    private MongoCollection<Document> currentKitCollection;
     private MongoCollection<Document> kitPackagesCollection;
 
     public MongoService(MongoClient client, String databaseName, CurrencyServiceAPI currencyServiceAPI) {
@@ -51,6 +53,7 @@ public class MongoService implements Service {
         MongoDatabase db = client.getDatabase(databaseName);
         this.playersCollection = db.getCollection("players");
         this.kitPackagesCollection = db.getCollection("packages");
+        this.currentKitCollection = db.getCollection("current");
     }
 
     @Override
@@ -150,5 +153,21 @@ public class MongoService implements Service {
     @Override
     public OwnsKitRes ownsKit(String packageId, String uuid, String kitId) {
         return new OwnsKitRes(getKits(packageId, uuid).getKits().contains(kitId));
+    }
+
+    @Override
+    public GetCurrentKitResponse getCurrentKit(String packageId, String uuid) {
+        Document doc =  currentKitCollection.find(new Document("packageId", packageId).append("uuid", uuid)).first();
+        if(doc == null)
+            return new GetCurrentKitResponse();
+        return new GetCurrentKitResponse(doc.getString("kit"));
+    }
+
+    @Override
+    public Success setCurrentKit(String packageId, String uuid, String kitId) {
+        if(!ownsKit(packageId, uuid, kitId).isOwned())
+            return new Success("The player does not own the kit", -2);
+        currentKitCollection.updateOne(new Document("packageId", packageId).append("uuid", uuid), set("kit", kitId), new UpdateOptions().upsert(true));
+        return new Success(true);
     }
 }

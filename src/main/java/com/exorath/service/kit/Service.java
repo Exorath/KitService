@@ -70,4 +70,22 @@ public interface Service {
      * @return whether or not the player owns this kit
      */
     OwnsKitRes ownsKit(String packageId, String uuid, String kitId);
+
+
+    /**
+     * Gets the current kit of the player
+     * @param packageId the package to get the kit from
+     * @param uuid the uuid of the player
+     * @return kit response
+     */
+    GetCurrentKitResponse getCurrentKit(String packageId, String uuid);
+
+    /**
+     * Sets the current kit of the player
+     * @param packageId the package to set the kit
+     * @param uuid the player uuid
+     * @param kitId the kit id
+     * @return success
+     */
+    Success setCurrentKit(String packageId, String uuid, String kitId);
 }

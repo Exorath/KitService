@@ -97,6 +97,22 @@ error codes:
 }
 ```
 
+#### /packages/{packageId}/player/{uuid}/current [GET] - Gets the current kit
+```json
+{
+"kit": "warrior"
+}
+```
+the response will be {} if no kit is selected
+
+#### /packages/{packageId}/player/{uuid}/current/{kitId} [PUT] - Sets the current kit
+Code -2 means the player does not own the kit
+
+```json
+{
+"success": "true"
+}
+```
 
 ## Environment
 | Name | Value |

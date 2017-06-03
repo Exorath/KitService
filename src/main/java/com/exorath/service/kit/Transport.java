@@ -48,8 +48,16 @@ public class Transport {
         post("/packages/:packageId/player/:uuid/kits/:kitId", getPurchaseKitRoute(service), GSON::toJson);
         get("/packages/:packageId/player/:uuid/kit/:kitId", getOwnsKitRoute(service), GSON::toJson);
 
+        get("/packages/:packageId/player/:uuid/current", getGetCurrentKitRoute(service), GSON::toJson);
+        put("/packages/:packageId/player/:uuid/current/:kitId", getPutCurrentKitRoute(service), GSON::toJson);
     }
 
+    private static Route getGetCurrentKitRoute(Service service) {
+        return (req, res) -> service.getCurrentKit(req.params("packageId"), req.params("uuid"));
+    }
+    private static Route getPutCurrentKitRoute(Service service) {
+        return (req, res) -> service.setCurrentKit(req.params("packageId"), req.params("uuid"), req.params("kitId"));
+    }
     private static Route getOwnsKitRoute(Service service) {
         return (req, res) -> service.ownsKit(req.params("packageId"), req.params("uuid"), req.params("kitId"));
     }

@@ -92,4 +92,31 @@ public class KitServiceAPI implements Service {
             return null;
         }
     }
+
+    @Override
+    public GetCurrentKitResponse getCurrentKit(String packageId, String uuid) {
+        try {
+            return GSON.fromJson(Unirest.post(url("/packages/{packageId}/player/{uuid}/current"))
+                    .routeParam("packageId", packageId)
+                    .routeParam("uuid", uuid)
+                    .asString().getBody(), GetCurrentKitResponse.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public Success setCurrentKit(String packageId, String uuid, String kitId) {
+        try {
+            return GSON.fromJson(Unirest.put(url("/packages/{packageId}/player/{uuid}/current/{kitId}"))
+                    .routeParam("packageId", packageId)
+                    .routeParam("uuid", uuid)
+                    .routeParam("kitId", kitId)
+                    .asString().getBody(), Success.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }
